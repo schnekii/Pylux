@@ -70,11 +70,12 @@ internal class SubtitleCaptureService : Service() {
                     startForeground(NOTIFICATION_ID, notification)
                 }
                 val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 0)
-                val resultData = if (Build.VERSION.SDK_INT >= 33)
+                val resultData: Intent? = if (Build.VERSION.SDK_INT >= 33) {
                     intent.getParcelableExtra(EXTRA_RESULT_DATA, Intent::class.java)
-                else
+                } else {
                     @Suppress("DEPRECATION")
-                    intent.getParcelableExtra(EXTRA_RESULT_DATA) as? Intent
+                    intent.getParcelableExtra<Intent>(EXTRA_RESULT_DATA)
+                }
                 if (resultData == null) {
                     Log.w(TAG, "Missing screen-capture consent result")
                     stopSelf()
@@ -186,7 +187,7 @@ internal class SubtitleCaptureService : Service() {
             @Suppress("DEPRECATION")
             android.app.Notification.Builder(this)
         return builder
-            .setSmallIcon(com.pylux.stream.R.drawable.ic_launcher_foreground)
+            .setSmallIcon(android.R.drawable.ic_menu_view)
             .setContentTitle("Pylux Türkçe Altyazı")
             .setContentText("Ekrandaki altyazılar Türkçeye çevriliyor")
             .setOngoing(true)
