@@ -85,9 +85,9 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 			}
 			ContextCompat.startForegroundService(this, serviceIntent)
 			subtitleCaptureActive = true
-			binding.subtitleTranslateButton.text = "TR Altyazı: Açık"
+			binding.subtitleTranslateButton.setText(R.string.subtitle_translate_on)
 		} else {
-			Toast.makeText(this, "Ekran yakalama izni verilmedi.", Toast.LENGTH_SHORT).show()
+			Toast.makeText(this, R.string.subtitle_permission_denied, Toast.LENGTH_SHORT).show()
 		}
 	}
 
@@ -169,7 +169,7 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 					action = SubtitleCaptureService.ACTION_STOP
 				})
 				subtitleCaptureActive = false
-				binding.subtitleTranslateButton.text = "TR Altyazı: Kapalı"
+				binding.subtitleTranslateButton.setText(R.string.subtitle_translate_off)
 				binding.translatedSubtitleOverlay.isGone = true
 			} else {
 				val manager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
@@ -222,9 +222,9 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 			override fun handleOnBackPressed() {
 				if (isTv()) {
 					alertDialogBuilder()
-						.setMessage("Disconnect from stream?")
-						.setPositiveButton("Disconnect") { _, _ -> finish() }
-						.setNegativeButton("Cancel", null)
+						.setMessage(R.string.disconnect_confirm)
+						.setPositiveButton(R.string.disconnect) { _, _ -> finish() }
+						.setNegativeButton(R.string.cancel, null)
 						.show()
 				} else {
 					showOverlay()
