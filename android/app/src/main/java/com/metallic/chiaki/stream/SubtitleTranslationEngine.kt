@@ -32,6 +32,7 @@ internal class SubtitleTranslationEngine(
             .build()
     )
     private val processing = AtomicBoolean(false)
+    @Volatile private var modelReady = false
     @Volatile private var lastSourceText = ""
     @Volatile private var lastTranslatedText = ""
     @Volatile private var closed = false
@@ -40,6 +41,7 @@ internal class SubtitleTranslationEngine(
         // The English model is downloaded on demand by ML Kit; no external translation
         // API key or paid cloud translation service is required.
         translator.downloadModelIfNeeded()
+            .addOnSuccessListener { modelReady = true }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Turkish translation model download failed", error)
                 onError("Türkçe çeviri modeli indirilemedi. İnternet bağlantısını kontrol edin.")
@@ -53,6 +55,7 @@ internal class SubtitleTranslationEngine(
             .addOnSuccessListener { result ->
                 val source = result.text.trim()
                 if (source.isEmpty() || source == lastSourceText || closed) return@addOnSuccessListener
+                if (!modelReady) return@addOnSuccessListener
                 lastSourceText = source
                 translator.translate(source)
                     .addOnSuccessListener { translated ->
