@@ -13,6 +13,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.media.projection.MediaProjectionManager
 import android.graphics.Matrix
 import android.os.*
@@ -73,6 +75,7 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 
 	private var subtitleCaptureActive = false
 	private var subtitleReceiverRegistered = false
+	private var hdmiOverlayTestActive = false
 
 	private val subtitlePermissionLauncher = registerForActivityResult(
 		ActivityResultContracts.StartActivityForResult()
@@ -89,6 +92,26 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 		} else {
 			Toast.makeText(this, R.string.subtitle_permission_denied, Toast.LENGTH_SHORT).show()
 		}
+	}
+
+	private val overlayPermissionLauncher = registerForActivityResult(
+		ActivityResultContracts.StartActivityForResult()
+	) {
+		if (Settings.canDrawOverlays(this)) {
+			startHdmiOverlayTest()
+		} else {
+			Toast.makeText(this, R.string.hdmi_overlay_permission_denied, Toast.LENGTH_SHORT).show()
+		}
+	}
+
+	private fun startHdmiOverlayTest() {
+		val overlayIntent = Intent(this, HdmiSubtitleOverlayService::class.java).apply {
+			action = HdmiSubtitleOverlayService.ACTION_SHOW
+			putExtra(HdmiSubtitleOverlayService.EXTRA_TEXT, getString(R.string.hdmi_overlay_test_text))
+		}
+		startService(overlayIntent)
+		hdmiOverlayTestActive = true
+		binding.hdmiOverlayTestButton.setText(R.string.hdmi_overlay_test_on)
 	}
 
 	private val subtitleTextReceiver = object : BroadcastReceiver() {
@@ -162,6 +185,25 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 			ContextCompat.RECEIVER_NOT_EXPORTED
 		)
 		subtitleReceiverRegistered = true
+
+		binding.hdmiOverlayTestButton.setOnClickListener {
+			if (hdmiOverlayTestActive) {
+				stopService(Intent(this, HdmiSubtitleOverlayService::class.java).apply {
+					action = HdmiSubtitleOverlayService.ACTION_STOP
+				})
+				hdmiOverlayTestActive = false
+				binding.hdmiOverlayTestButton.setText(R.string.hdmi_overlay_test_off)
+			} else if (Settings.canDrawOverlays(this)) {
+				startHdmiOverlayTest()
+			} else {
+				Toast.makeText(this, R.string.hdmi_overlay_permission_required, Toast.LENGTH_LONG).show()
+				val settingsIntent = Intent(
+					Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+					Uri.parse("package:" + packageName)
+				)
+				overlayPermissionLauncher.launch(settingsIntent)
+			}
+		}
 
 		binding.subtitleTranslateButton.setOnClickListener {
 			if (subtitleCaptureActive) {
