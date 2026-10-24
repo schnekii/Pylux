@@ -233,4 +233,9 @@
     <string name="disconnect_confirm">Uzaktan oynatma bağlantısı kesilsin mi?</string>
     <string name="disconnect">Bağlantıyı kes</string>
     <string name="cancel">İptal</string>
+    <string name="hdmi_overlay_test_off">HDMI üstü yazı testi: Kapalı</string>
+    <string name="hdmi_overlay_test_on">HDMI üstü yazı testi: Açık</string>
+    <string name="hdmi_overlay_permission_required">HDMI üstü yazıyı göstermek için diğer uygulamaların üzerinde gösterme izni gerekiyor.</string>
+    <string name="hdmi_overlay_test_text">Türkçe altyazı burada görünecek</string>
+    <string name="hdmi_overlay_permission_denied">Ekranın üzerinde gösterme izni verilmedi.</string>
 </resources>
