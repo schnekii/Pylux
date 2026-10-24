@@ -12,6 +12,7 @@ import android.content.res.Configuration
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.graphics.Matrix
 import android.os.*
