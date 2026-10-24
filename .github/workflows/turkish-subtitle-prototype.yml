@@ -13,6 +13,9 @@ jobs:
   build-debug-apk:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ANDROID_HOME: /usr/local/lib/android/sdk
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -25,12 +28,12 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" --licenses || true
 
       - name: Install Android build packages
         run: |
-          sdkmanager --install \
+          "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" --install \
             "ndk;28.2.13676358" \
             "cmake;3.30.4" \
             "build-tools;35.0.0" \
@@ -40,7 +43,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq protobuf-compiler
-          python3 -m pip install 'protobuf>=5,<6' 'grpcio-tools>=1.60'
+          python3 -m pip install --break-system-packages 'protobuf>=5,<6' 'grpcio-tools>=1.60'
 
       - name: Configure Android SDK path
         working-directory: android
