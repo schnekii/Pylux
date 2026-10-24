@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Pylux - Türkçe Altyazı</string>
+    <string name="title_main">Pylux - Türkçe Altyazı</string>
+    <string name="preferences_donate_billing_unavailable">Bu cihazda Google Play ödeme sistemi kullanılamıyor. Play Store'u yükle veya güncelle ya da destek satın alımlarının çalışması için Pylux'u Google Play'den yükle.</string>
+    <string name="donation_paywall_external_hint">Google Play ödemesi burada kullanılamıyor. PayPal'ı açmak için QR kodunu telefonunla tara veya aşağıdaki bağlantıyı kullan.</string>
+    <string name="donation_paywall_qr_content_description">PayPal destek sayfasına yönlendiren QR kodu</string>
+    <string name="donation_paywall_trust_paypal">Tarayıcında PayPal üzerinden bağış yap.</string>
+    <string name="preferences_cloud_bitrate_pscloud_summary">%1$d Mbps (varsayılan 20 Mbps)</string>
+    <string name="preferences_cloud_bitrate_psnow_summary">%1$d Mbps (varsayılan 20 Mbps)</string>
+    <string name="preferences_dpad_touch_increment_summary">%1$d (adım başına %2$s mm)</string>
+    <string name="preferences_codec_title_h264">H264</string>
+    <string name="preferences_resolution_title_360p">360p</string>
+    <string name="preferences_resolution_title_540p">540p</string>
+    <string name="preferences_resolution_title_720p">720p</string>
+    <string name="preferences_resolution_title_1080p">1080p</string>
+    <string name="preferences_fps_title_30">30</string>
+    <string name="preferences_fps_title_60">60</string>
+    <string name="preferences_category_title_game_catalog">Yayınlanabilir oyunlar (PS3/PS4)</string>
+    <string name="preferences_cloud_resolution_psnow_title">Çözünürlük</string>
+    <string name="preferences_cloud_resolution_pscloud_title">Çözünürlük</string>
+    <string name="preferences_cloud_datacenter_pscloud_title">Veri merkezi</string>
+    <string name="preferences_cloud_datacenter_psnow_title">Veri merkezi</string>
+    <string name="preferences_cloud_bitrate_pscloud_title">Bit hızı</string>
+    <string name="preferences_cloud_bitrate_psnow_title">Bit hızı</string>
     <string name="title_settings">Ayarlar</string>
     <string name="tab_remote_play">Uzaktan Oynatma</string>
     <string name="tab_cloud_play">Bulut Üzerinden Oynama</string>
