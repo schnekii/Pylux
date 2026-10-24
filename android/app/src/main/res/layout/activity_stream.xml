@@ -34,6 +34,18 @@
         android:visibility="visible"
         tools:ignore="HardcodedText" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hdmiOverlayTestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="28dp"
+        android:text="@string/hdmi_overlay_test_off"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="visible" />
+
     <TextView
         android:id="@+id/translatedSubtitleOverlay"
         android:layout_width="match_parent"
