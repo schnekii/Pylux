@@ -13,9 +13,6 @@ jobs:
   build-debug-apk:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    env:
-      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      ANDROID_HOME: /usr/local/lib/android/sdk
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -28,12 +25,17 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 12266719
+
       - name: Accept Android SDK licenses
-        run: yes | "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" --licenses || true
+        run: yes | sdkmanager --licenses || true
 
       - name: Install Android build packages
         run: |
-          "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" --install \
+          sdkmanager --install \
             "ndk;28.2.13676358" \
             "cmake;3.30.4" \
             "build-tools;35.0.0" \
