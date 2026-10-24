@@ -238,4 +238,12 @@
     <string name="hdmi_overlay_permission_required">HDMI üstü yazıyı göstermek için diğer uygulamaların üzerinde gösterme izni gerekiyor.</string>
     <string name="hdmi_overlay_test_text">Türkçe altyazı burada görünecek</string>
     <string name="hdmi_overlay_permission_denied">Ekranın üzerinde gösterme izni verilmedi.</string>
+    <string name="alert_regist_duplicate">MAC adresi %s olan konsol zaten kaydedilmiş. Önceki kayıt değiştirilsin mi?</string>
+    <string name="alert_message_import">Kayıtlı konsollar: %s\n\nElle eklenen konsollar: %s</string>
+    <string name="alert_message_import_failed">Ayarlar dosyadan içe aktarılamadı:\n%s</string>
+    <string name="preferences_donate_already_supporting">Bu hesapta zaten bir destek satın alımı var. Teşekkürler!</string>
+    <string name="alert_message_delete_registered_host">%s adlı, kimliği %s olan kayıtlı konsolu silmek istediğine emin misin?</string>
+    <string name="alert_message_delete_manual_host">%s için konsol kaydını silmek istediğine emin misin?</string>
+    <string name="donation_tier_content_description">%1$s, %2$s. Google Play üzerinden bir kez bağış yapmak için iki kez dokun.</string>
+    <string name="donation_paywall_logo_content_description">Pylux</string>
 </resources>
