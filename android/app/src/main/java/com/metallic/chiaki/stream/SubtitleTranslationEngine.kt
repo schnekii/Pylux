@@ -71,6 +71,7 @@ internal class SubtitleTranslationEngine(
             }
             .addOnCompleteListener {
                 processing.set(false)
+                if (!bitmap.isRecycled) bitmap.recycle()
             }
     }
 
