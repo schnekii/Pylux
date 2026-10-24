@@ -90,7 +90,6 @@
     <string name="donation_paywall_external_title">PayPal ile destek ol</string>
     <string name="donation_paywall_external_open_link">PayPal bağlantısını aç</string>
     <string name="donation_paywall_external_no_browser">Bu cihazda bağlantıyı açabilecek bir uygulama yok.</string>
-    <string name="donation_paywall_trust_paypal">Tarayıcında PayPal üzerinden bağış yap.</string>
     <string name="preferences_category_title_general">Genel</string>
     <string name="preferences_category_title_stream">Uzaktan Oynatma Ayarları</string>
     <string name="preferences_category_title_export">Dışa aktarma</string>
@@ -152,17 +151,10 @@
     <string name="preferences_psn_logout_success">Oturum başarıyla kapatıldı</string>
     <string name="preferences_category_title_cloud_settings">Bulut ayarları</string>
     <string name="preferences_category_title_game_library">Sahip olunan oyunlar (PS5)</string>
-    <string name="preferences_cloud_resolution_pscloud_title">Çözünürlük</string>
     <string name="preferences_cloud_resolution_pscloud_summary">Sahip olunan oyunlar için yayın çözünürlüğü (en fazla 4K)</string>
-    <string name="preferences_cloud_datacenter_pscloud_title">Veri merkezi</string>
     <string name="preferences_cloud_datacenter_pscloud_summary">Belirli bir veri merkezi seç veya en iyi ping için Otomatik'i kullan</string>
-    <string name="preferences_cloud_bitrate_pscloud_title">Bit hızı</string>
-    <string name="preferences_category_title_game_catalog">Yayınlanabilir oyunlar (PS3/PS4)</string>
-    <string name="preferences_cloud_resolution_psnow_title">Çözünürlük</string>
     <string name="preferences_cloud_resolution_psnow_summary">Yayınlanabilir oyunlar için çözünürlük (en fazla 1080p)</string>
-    <string name="preferences_cloud_datacenter_psnow_title">Veri merkezi</string>
     <string name="preferences_cloud_datacenter_psnow_summary">Belirli bir veri merkezi seç veya en iyi ping için Otomatik'i kullan</string>
-    <string name="preferences_cloud_bitrate_psnow_title">Bit hızı</string>
     <string name="psn_login_title">Giriş yap</string>
     <string name="psn_login_button">GİRİŞ YAP</string>
     <string name="psn_login_success">Giriş başarılı</string>
