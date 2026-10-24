@@ -120,6 +120,12 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 			if (translated.isNotEmpty()) {
 				binding.translatedSubtitleOverlay.text = translated
 				binding.translatedSubtitleOverlay.isVisible = true
+				if (hdmiOverlayTestActive) {
+					startService(Intent(this, HdmiSubtitleOverlayService::class.java).apply {
+						action = HdmiSubtitleOverlayService.ACTION_UPDATE_TEXT
+						putExtra(HdmiSubtitleOverlayService.EXTRA_TEXT, translated)
+					})
+				}
 			}
 		}
 	}
