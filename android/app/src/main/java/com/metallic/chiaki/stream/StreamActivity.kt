@@ -9,13 +9,20 @@ import com.metallic.chiaki.common.ext.alertDialogBuilder
 import com.metallic.chiaki.common.ext.isTv
 import android.app.PictureInPictureParams
 import android.content.res.Configuration
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+import android.media.projection.MediaProjectionManager
 import android.graphics.Matrix
 import android.os.*
 import android.util.Log
 import android.util.Rational
 import android.view.*
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -62,6 +69,36 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 
 	private lateinit var viewModel: StreamViewModel
 	private lateinit var binding: ActivityStreamBinding
+
+	private var subtitleCaptureActive = false
+	private var subtitleReceiverRegistered = false
+
+	private val subtitlePermissionLauncher = registerForActivityResult(
+		ActivityResultContracts.StartActivityForResult()
+	) { result ->
+		if (result.resultCode == RESULT_OK && result.data != null) {
+			val serviceIntent = Intent(this, SubtitleCaptureService::class.java).apply {
+				action = SubtitleCaptureService.ACTION_START
+				putExtra(SubtitleCaptureService.EXTRA_RESULT_CODE, result.resultCode)
+				putExtra(SubtitleCaptureService.EXTRA_RESULT_DATA, result.data)
+			}
+			ContextCompat.startForegroundService(this, serviceIntent)
+			subtitleCaptureActive = true
+			binding.subtitleTranslateButton.text = "TR Altyazı: Açık"
+		} else {
+			Toast.makeText(this, "Ekran yakalama izni verilmedi.", Toast.LENGTH_SHORT).show()
+		}
+	}
+
+	private val subtitleTextReceiver = object : BroadcastReceiver() {
+		override fun onReceive(context: Context?, intent: Intent?) {
+			val translated = intent?.getStringExtra(SubtitleCaptureService.EXTRA_TEXT)?.trim().orEmpty()
+			if (translated.isNotEmpty()) {
+				binding.translatedSubtitleOverlay.text = translated
+				binding.translatedSubtitleOverlay.isVisible = true
+			}
+		}
+	}
 
 	private val uiVisibilityHandler = Handler()
 
@@ -116,6 +153,28 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 		binding = ActivityStreamBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		window.decorView.setOnSystemUiVisibilityChangeListener(this)
+
+		ContextCompat.registerReceiver(
+			this,
+			subtitleTextReceiver,
+			IntentFilter(SubtitleCaptureService.ACTION_TEXT),
+			ContextCompat.RECEIVER_NOT_EXPORTED
+		)
+		subtitleReceiverRegistered = true
+
+		binding.subtitleTranslateButton.setOnClickListener {
+			if (subtitleCaptureActive) {
+				stopService(Intent(this, SubtitleCaptureService::class.java).apply {
+					action = SubtitleCaptureService.ACTION_STOP
+				})
+				subtitleCaptureActive = false
+				binding.subtitleTranslateButton.text = "TR Altyazı: Kapalı"
+				binding.translatedSubtitleOverlay.isGone = true
+			} else {
+				val manager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+				subtitlePermissionLauncher.launch(manager.createScreenCaptureIntent())
+			}
+		}
 
 		viewModel.onScreenControlsEnabled.observe(this, Observer {
 			if(binding.onScreenControlsSwitch.isChecked != it)
@@ -315,6 +374,16 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 		flushStreamTimeSegment()
 		donationCoordinator.onDestroy()
 		controlsDisposable.dispose()
+		if (subtitleReceiverRegistered) {
+			unregisterReceiver(subtitleTextReceiver)
+			subtitleReceiverRegistered = false
+		}
+		if (subtitleCaptureActive) {
+			stopService(Intent(this, SubtitleCaptureService::class.java).apply {
+				action = SubtitleCaptureService.ACTION_STOP
+			})
+			subtitleCaptureActive = false
+		}
 		uiVisibilityHandler.removeCallbacksAndMessages(null)
 		stopStatsPolling()
 	}
