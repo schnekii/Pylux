@@ -357,4 +357,17 @@
     <string name="donation_paywall_restore_already">Your support purchase is already on this device.</string>
     <string name="donation_paywall_restore_success">Purchases restored. Thank you for supporting Pylux!</string>
     <string name="donation_paywall_restore_unavailable">Couldn\'t reach Google Play. Try again in a moment.</string>
+    <string name="cancel">Cancel</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="disconnect_confirm">Disconnect Remote Play session?</string>
+    <string name="hdmi_overlay_permission_denied">Overlay permission was not granted.</string>
+    <string name="hdmi_overlay_permission_required">Permission to display over other apps is required to show subtitles over HDMI.</string>
+    <string name="hdmi_overlay_test_off">HDMI overlay test: Off</string>
+    <string name="hdmi_overlay_test_on">HDMI overlay test: On</string>
+    <string name="hdmi_overlay_test_text">Turkish subtitles will appear here</string>
+    <string name="on_screen_controls">On-screen controls</string>
+    <string name="subtitle_permission_denied">Screen capture permission was not granted.</string>
+    <string name="subtitle_translate_off">Turkish subtitles: Off</string>
+    <string name="subtitle_translate_on">Turkish subtitles: On</string>
+    <string name="touchpad_only">Touchpad only</string>
 </resources>
