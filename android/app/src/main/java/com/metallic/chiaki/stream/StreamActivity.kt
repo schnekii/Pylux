@@ -74,12 +74,17 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 	private lateinit var binding: ActivityStreamBinding
 
 	private var subtitleCaptureActive = false
+	// MediaProjection's system consent UI temporarily backgrounds this Activity.
+	// Keep the Remote Play session alive until the user returns from that dialog.
+	private var requestingSubtitlePermission = false
 	private var subtitleReceiverRegistered = false
 	private var hdmiOverlayTestActive = false
 
 	private val subtitlePermissionLauncher = registerForActivityResult(
 		ActivityResultContracts.StartActivityForResult()
 	) { result ->
+		requestingSubtitlePermission = false
+		Log.i("StreamActivity", "Subtitle capture permission result: code=${result.resultCode}, hasData=${result.data != null}")
 		if (result.resultCode == RESULT_OK && result.data != null) {
 			val serviceIntent = Intent(this, SubtitleCaptureService::class.java).apply {
 				action = SubtitleCaptureService.ACTION_START
@@ -223,7 +228,14 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 				binding.translatedSubtitleOverlay.isGone = true
 			} else {
 				val manager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-				subtitlePermissionLauncher.launch(manager.createScreenCaptureIntent())
+				requestingSubtitlePermission = true
+				try {
+					subtitlePermissionLauncher.launch(manager.createScreenCaptureIntent())
+				} catch (error: Exception) {
+					requestingSubtitlePermission = false
+					Log.e("StreamActivity", "Could not request subtitle screen-capture permission", error)
+					Toast.makeText(this, R.string.subtitle_permission_denied, Toast.LENGTH_SHORT).show()
+				}
 			}
 		}
 
@@ -395,7 +407,7 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 		}
 		// In PiP mode the stream should keep running, so skip pause.
 		// isInPictureInPictureMode is the built-in Activity property.
-		if (!isInPictureInPictureMode)
+		if (!isInPictureInPictureMode && !requestingSubtitlePermission)
 		{
 			viewModel.session.skipNativeSurfaceCleanup = false
 			viewModel.session.pause()
@@ -411,7 +423,7 @@ class StreamActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListe
 		// When not in PiP, ensure the session is properly shut down.
 		// This handles the normal exit path (redundant with onPause, but safe).
 		// When in PiP, onStop fires with pip=true (cleanup deferred to handlePipChanged).
-		if (!isInPictureInPictureMode)
+		if (!isInPictureInPictureMode && !requestingSubtitlePermission)
 		{
 			viewModel.session.skipNativeSurfaceCleanup = false
 			viewModel.session.pause()
